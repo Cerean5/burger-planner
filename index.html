@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#16a34a">
+  <meta name="description" content="Discover vegan burger recipes, smoothies, salads, meal planning and plant-based cooking inspiration.">
+  <title>Burger Planner | Plant-Based Recipes</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="index.html">
+      <img src="icon.svg" alt="" width="44" height="44">
+      <span>Burger Planner</span>
+    </a>
+    <button id="menuButton" class="menu-button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <nav id="navigation">
+      <a href="#recipes">Recipes</a>
+      <a href="#planner">Meal Planner</a>
+      <a href="#smoothies">Smoothies</a>
+      <a href="#salads">Salads</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">100% PLANT-BASED</p>
+        <h1>Build a better burger.</h1>
+        <p>Discover satisfying vegan burgers, fresh smoothies, colorful salads and simple meal-planning ideas.</p>
+        <a class="button" href="#recipes">Explore Recipes</a>
+      </div>
+    </section>
+
+    <section class="section" id="recipes">
+      <p class="eyebrow">FIND YOUR NEXT FAVORITE</p>
+      <h2>Vegan Burger Recipes</h2>
+      <p>Choose an idea to add it to your meal plan.</p>
+      <div class="filters">
+        <input id="search" type="search" placeholder="Search recipes..." aria-label="Search recipes">
+        <select id="category" aria-label="Filter recipes">
+          <option value="all">All recipes</option>
+          <option value="bean">Bean burgers</option>
+          <option value="mushroom">Mushroom burgers</option>
+          <option value="grain">Grain burgers</option>
+        </select>
+      </div>
+      <div id="recipeGrid" class="grid"></div>
+    </section>
+
+    <section class="section feature" id="planner">
+      <p class="eyebrow">PLAN YOUR WEEK</p>
+      <h2>Your Vegan Meal Planner</h2>
+      <p>Add recipes to your plan and organize your next meals.</p>
+      <div id="mealPlan" class="plan-list"></div>
+      <button id="clearPlan" class="button secondary">Clear Meal Plan</button>
+    </section>
+
+    <section class="section" id="smoothies">
+      <p class="eyebrow">FRESH AND FRUITY</p>
+      <h2>Smoothie Ideas</h2>
+      <div class="simple-grid">
+        <article class="mini-card"><span>🍓</span><h3>Berry Banana</h3><p>Strawberries, banana, oat milk and chia seeds.</p></article>
+        <article class="mini-card"><span>🥭</span><h3>Mango Sunrise</h3><p>Mango, pineapple, banana and plant milk.</p></article>
+        <article class="mini-card"><span>🥬</span><h3>Green Energy</h3><p>Spinach, banana, apple and oat milk.</p></article>
+      </div>
+    </section>
+
+    <section class="section feature" id="salads">
+      <p class="eyebrow">COLOR YOUR PLATE</p>
+      <h2>Fresh Vegan Salads</h2>
+      <div class="simple-grid">
+        <article class="mini-card"><span>🥗</span><h3>Chickpea Crunch</h3><p>Chickpeas, cucumber, tomato, greens and lemon dressing.</p></article>
+        <article class="mini-card"><span>🥑</span><h3>Avocado Garden</h3><p>Avocado, mixed greens, corn, tomatoes and lime.</p></article>
+        <article class="mini-card"><span>🥕</span><h3>Rainbow Slaw</h3><p>Cabbage, carrots, red pepper and tangy vegan dressing.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <img src="icon.svg" alt="" width="34" height="34">
+    <p><strong>Burger Planner</strong></p>
+    <p>Good food. Plant-powered choices.</p>
+    <p>© <span id="year"></span> Burger Planner</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
