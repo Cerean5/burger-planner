@@ -1,0 +1,143 @@
+
+const recipes = [
+  { id: 1, name: "Smoky Black Bean Burger", category: "bean", icon: "🍔", description: "Black beans, oats, smoked paprika, garlic and onion." },
+  { id: 2, name: "Crispy Chickpea Burger", category: "bean", icon: "🥙", description: "Chickpeas, parsley, cumin, lemon and breadcrumbs." },
+  { id: 3, name: "Portobello Mushroom Burger", category: "mushroom", icon: "🍄", description: "Marinated mushrooms, greens and vegan garlic sauce." },
+  { id: 4, name: "Lentil Walnut Burger", category: "grain", icon: "🌾", description: "Lentils, walnuts, oats and savory herbs." },
+  { id: 5, name: "Sweet Potato Bean Burger", category: "bean", icon: "🍠", description: "Sweet potato, kidney beans, cumin and oats." },
+  { id: 6, name: "Quinoa Garden Burger", category: "grain", icon: "🥬", description: "Quinoa, vegetables, herbs and chickpea flour." }
+];
+
+const grid = document.getElementById("recipeGrid");
+const planElement = document.getElementById("mealPlan");
+const search = document.getElementById("search");
+const category = document.getElementById("category");
+
+let mealPlan = [];
+try {
+  mealPlan = JSON.parse(localStorage.getItem("burgerPlannerMealPlan") || "[]");
+  if (!Array.isArray(mealPlan)) mealPlan = [];
+} catch {
+  mealPlan = [];
+}
+
+function renderRecipes() {
+  const term = search.value.trim().toLowerCase();
+  const selectedCategory = category.value;
+
+  const filtered = recipes.filter(recipe =>
+    recipe.name.toLowerCase().includes(term) &&
+    (selectedCategory === "all" || recipe.category === selectedCategory)
+  );
+
+  grid.replaceChildren();
+
+  if (!filtered.length) {
+    grid.textContent = "No matching recipes. Try another search.";
+    return;
+  }
+
+  filtered.forEach(recipe => {
+    const card = document.createElement("article");
+    card.className = "recipe-card";
+
+    const photo = document.createElement("div");
+    photo.className = "recipe-photo";
+    photo.setAttribute("aria-hidden", "true");
+    photo.textContent = recipe.icon;
+
+    const body = document.createElement("div");
+    body.className = "card-body";
+
+    const heading = document.createElement("h3");
+    heading.textContent = recipe.name;
+
+    const description = document.createElement("p");
+    description.textContent = recipe.description;
+
+    const button = document.createElement("button");
+    button.className = "button";
+    button.textContent = mealPlan.includes(recipe.id) ? "Added to Plan" : "Add to Meal Plan";
+    button.disabled = mealPlan.includes(recipe.id);
+    button.addEventListener("click", () => {
+      if (!mealPlan.includes(recipe.id)) {
+        mealPlan.push(recipe.id);
+        savePlan();
+        renderRecipes();
+        renderPlan();
+      }
+    });
+
+    body.append(heading, description, button);
+    card.append(photo, body);
+    grid.append(card);
+  });
+}
+
+function savePlan() {
+  try {
+    localStorage.setItem("burgerPlannerMealPlan", JSON.stringify(mealPlan));
+  } catch {
+    alert("Your browser could not save the meal plan. Check storage settings.");
+  }
+}
+
+function renderPlan() {
+  planElement.replaceChildren();
+
+  if (!mealPlan.length) {
+    planElement.textContent = "Your meal plan is empty. Add a recipe above.";
+    return;
+  }
+
+  mealPlan.forEach(id => {
+    const recipe = recipes.find(item => item.id === id);
+    if (!recipe) return;
+
+    const row = document.createElement("div");
+    row.className = "plan-item";
+
+    const name = document.createElement("span");
+    name.textContent = recipe.icon + " " + recipe.name;
+
+    const remove = document.createElement("button");
+    remove.textContent = "Remove";
+    remove.setAttribute("aria-label", "Remove " + recipe.name);
+    remove.addEventListener("click", () => {
+      mealPlan = mealPlan.filter(item => item !== id);
+      savePlan();
+      renderPlan();
+      renderRecipes();
+    });
+
+    row.append(name, remove);
+    planElement.append(row);
+  });
+}
+
+search.addEventListener("input", renderRecipes);
+category.addEventListener("change", renderRecipes);
+
+document.getElementById("clearPlan").addEventListener("click", () => {
+  mealPlan = [];
+  savePlan();
+  renderPlan();
+  renderRecipes();
+});
+
+document.getElementById("menuButton").addEventListener("click", () => {
+  const nav = document.getElementById("navigation");
+  const opened = nav.classList.toggle("open");
+  document.getElementById("menuButton").setAttribute("aria-expanded", String(opened));
+});
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  });
+}
+
+renderRecipes();
+renderPlan();
